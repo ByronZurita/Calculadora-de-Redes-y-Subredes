@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IP_Dir", "IP_Dir.csproj", "{B4DF5695-3A23-A02B-2FBC-78887A271DD1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculadora_de_Redes_y_Subredes", "Calculadora_de_Redes_y_Subredes.csproj", "{B4DF5695-3A23-A02B-2FBC-78887A271DD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

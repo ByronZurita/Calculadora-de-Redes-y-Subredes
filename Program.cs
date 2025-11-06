@@ -1,4 +1,17 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------
+// Proyecto: Calculadora de Redes y Subredes (CIDR y VLSM)
+// Descripción:
+//   Esta aplicación permite calcular:
+//     - Datos de una red a partir de una IP con CIDR o cantidad de hosts requeridos
+//     - Subredes utilizando VLSM (Variable Length Subnet Masking)
+//   Incluye generación de archivo .txt con los resultados de la subdivisión VLSM.
+//
+// Uso recomendado:
+//   Ejecutar por consola. El usuario debe ingresar una IP válida y la información solicitada
+//   por el menú. Los resultados de VLSM pueden exportarse automáticamente.
+// --------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,21 +26,21 @@ namespace SubnetCalculator
             while (continueProgram)
             {
                 Console.Clear();
-                Console.WriteLine("Subnetting Tool");
-                Console.WriteLine("---------------");
-                Console.WriteLine("1. Calcular una subred (CIDR)");
+                Console.WriteLine("Calculadora de Redes y Subredes");
+                Console.WriteLine("--------------------------------");
+                Console.WriteLine("1. Calcular red a partir de CIDR o número de hosts");
                 Console.WriteLine("2. Calcular subredes con VLSM");
                 Console.WriteLine("0. Salir");
-                Console.Write("Seleccione una opción: ");
+                Console.Write("\nSeleccione una opción: ");
                 string option = Console.ReadLine();
 
                 switch (option)
                 {
                     case "1":
-                        CalculateSingleSubnet(); // Option 1: Simple subnet with IP + CIDR or IP + host count
+                        CalculateSingleSubnet(); // Opción 1: Cálculo de una sola subred usando CIDR o número de hosts
                         break;
                     case "2":
-                        RunVLSMCalculator(); // Option 2: VLSM calculation with varying subnet sizes
+                        RunVLSMCalculator(); // Opción 2: Cálculo de subredes VLSM
                         break;
                     case "0":
                         continueProgram = false;
@@ -50,7 +63,7 @@ namespace SubnetCalculator
         {
             Console.WriteLine("\nSeleccione el modo de cálculo:");
             Console.WriteLine("1. Ingresar IP con CIDR (ej. 192.168.1.0/24)");
-            Console.WriteLine("2. Ingresar IP base y cantidad de hosts");
+            Console.WriteLine("2. Ingresar IP base y cantidad de hosts requeridos");
             Console.Write("Opción: ");
             string mode = Console.ReadLine().Trim();
 
@@ -143,6 +156,9 @@ namespace SubnetCalculator
                 return;
             }
 
+            Console.WriteLine("\nIngrese el número de hosts que necesita para cada subred.");
+            Console.WriteLine("Nota: El programa ordenará las subredes desde la que requiere más hosts a la que requiere menos.\n");
+
             List<Host> hosts = new List<Host>();
             for (int i = 0; i < numberOfSubnets; i++)
             {
@@ -164,8 +180,8 @@ namespace SubnetCalculator
                 resultText += $"   Dirección de Red: {subnet.NetworkIP}\n";
                 resultText += $"   Máscara de Subred: {subnet.Mask}\n";
                 resultText += $"   CIDR: /{subnet.CIDR}\n";
-                resultText += $"   Hosts Necesarios: {subnet.HostsNeeded}\n";
-                resultText += $"   Hosts Disponibles: {subnet.AvailableHosts}\n";
+                resultText += $"   Hosts requeridos     : {subnet.HostsNeeded}\n";
+                resultText += $"   Hosts disponibles    : {subnet.AvailableHosts}\n";
                 resultText += $"   Rango Utilizable: {subnet.UsableRange}\n";
                 resultText += $"   Dirección de Broadcast: {subnet.Broadcast}\n\n";
             }
@@ -187,6 +203,8 @@ namespace SubnetCalculator
         }
 
         // Lógica principal para generación de subredes VLSM
+        // Genera las subredes usando VLSM (Variable Length Subnet Masking)
+        // Ordena las subredes desde la que requiere más hosts para minimizar desperdicio de direcciones IP.
         static List<Subnet> GenerateSubnets(string ipBase, List<Host> hosts)
         {
             List<Subnet> subnets = new List<Subnet>();
@@ -306,14 +324,15 @@ namespace SubnetCalculator
             return binary.Count(c => c == '1');
         }
 
-        // Exporta resultados a un archivo .txt
+        // Exporta los resultados del cálculo VLSM a un archivo .txt con fecha y hora para facilitar registro o estudio.
         static void ExportResults(string resultText)
         {
-            string fileName = "resultados_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".txt";
+            string fileName = "Resultados_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
             try
             {
                 System.IO.File.WriteAllText(fileName, resultText);
-                Console.WriteLine($"Resultados guardados en {fileName}.");
+                Console.WriteLine($"Resultados guardados correctamente en el archivo: {fileName}");
+                Console.WriteLine("Puede abrir el archivo para revisar las subredes generadas.");
             }
             catch (Exception ex)
             {
